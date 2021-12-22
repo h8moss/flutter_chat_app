@@ -1,73 +1,67 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-class MessageInput extends StatefulWidget {
+class MessageInput extends StatelessWidget {
   const MessageInput({
     required this.onSubmit,
-    this.clearInput = true,
+    this.formKey,
+    this.validateInput,
+    this.textController,
     Key? key,
   }) : super(key: key);
 
-  final ValueChanged<String>? onSubmit;
-  final bool clearInput;
-
-  @override
-  State<MessageInput> createState() => _MessageInputState();
-}
-
-class _MessageInputState extends State<MessageInput> {
-  final TextEditingController _controller = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
-
-    super.dispose();
-  }
+  final Key? formKey;
+  final VoidCallback? onSubmit;
+  final String? Function(String?)? validateInput;
+  final TextEditingController? textController;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: Container(
-        color: Colors.grey.shade400,
+        color: Colors.grey.shade100,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Expanded(
-                  child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 100),
-                child: TextField(
-                  controller: _controller,
-                  onSubmitted: (_) => _submit(),
-                  focusNode: _focusNode,
-                ),
-              )),
-              ElevatedButton(
-                onPressed: _submit,
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Icon(
-                    Icons.send,
-                    size: 20,
+          child: Form(
+              key: formKey,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextFormField(
+                        controller: textController,
+                        validator: validateInput,
+                        onEditingComplete: onSubmit,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          hintText: 'Message',
+                          fillColor: Colors.grey.shade400,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(30)),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                style: ElevatedButton.styleFrom(shape: const CircleBorder()),
-              ),
-            ],
-          ),
+                  ElevatedButton(
+                    onPressed: onSubmit,
+                    child: const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Icon(
+                        Icons.send,
+                        size: 20,
+                      ),
+                    ),
+                    style:
+                        ElevatedButton.styleFrom(shape: const CircleBorder()),
+                  )
+                ],
+              )),
         ),
       ),
     );
-  }
-
-  void _submit() {
-    final text = _controller.text;
-    _controller.text = '';
-    if (widget.onSubmit != null) {
-      widget.onSubmit!(text);
-    }
-    _focusNode.requestFocus();
   }
 }

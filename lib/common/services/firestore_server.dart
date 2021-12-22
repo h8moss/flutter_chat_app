@@ -11,11 +11,11 @@ class FireStoreServer {
 
   FirebaseFirestore get _firestore => FirebaseFirestore.instance;
 
-  void sendMessage(String text) {
+  Future<void> sendMessage(String text) async {
     ChatMessage message =
         ChatMessage(sender: currentUser, sentDate: DateTime.now(), text: text);
 
-    _firestore.collection('messages').add(message.toMap());
+    await _firestore.collection('messages').add(message.toMap());
   }
 
   Stream<List<ChatMessage>> get messages => _firestore

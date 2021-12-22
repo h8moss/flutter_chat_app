@@ -3,7 +3,7 @@ import 'package:flutter_chat_app/common/models/auth_state.dart';
 import 'package:flutter_chat_app/common/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
-import 'home_page.dart';
+import 'home/home_page.dart';
 import 'login_page.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -21,7 +21,7 @@ class LandingScreen extends StatelessWidget {
               return _buildLoadingPage();
             }
             if (snapshot.data == AuthState.authenticated) {
-              return const HomePage();
+              return HomePage.create(context);
             }
             return const LoginPage();
           },
