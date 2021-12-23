@@ -34,6 +34,8 @@ class _MessageListViewState extends State<MessageListView> {
                 return MessageWidget(
                   message: snapshot.data![index],
                   currentUser: Provider.of<AuthService>(context).currentUser!,
+                  onDelete: () => print('delete ${snapshot.data![index].text}'),
+                  onReport: () => print('report ${snapshot.data![index].text}'),
                 );
               },
               itemCount: snapshot.data!.length,
