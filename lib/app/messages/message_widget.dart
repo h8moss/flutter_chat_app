@@ -1,85 +1,75 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/common/models/app_user.dart';
 import 'package:flutter_chat_app/common/models/chat_message.dart';
-import 'package:flutter_chat_app/common/widgets/platform_widget.dart';
+import 'package:flutter_chat_app/common/models/message_widget_style.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class MessageWidget extends StatelessWidget {
   const MessageWidget({
     Key? key,
     required this.message,
-    required this.currentUser,
-    this.onDelete,
-    this.onReport,
+    required this.onButtonPressed,
+    this.style = const MessageWidgetStyle(),
+    this.buttonLabel,
   }) : super(key: key);
 
   final ChatMessage message;
-  final AppUser currentUser;
-
-  final VoidCallback? onDelete;
-  final VoidCallback? onReport;
-
-  bool get isCurrentUser => message.sender == currentUser;
+  final MessageWidgetStyle style;
+  final String? buttonLabel;
+  final FutureOr<void> Function()? onButtonPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment:
-            isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+    return ResponsiveBuilder(builder: (context, sizingInformation) {
+      return Row(
         children: [
-          Text(
-            message.sender.username,
-            style: const TextStyle(color: Colors.grey, fontSize: 12),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment:
-                isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-            children: [
-              if (isCurrentUser) Flexible(child: Container(), flex: 5),
-              Flexible(
-                flex: 4,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    color: isCurrentUser ? Colors.blue : Colors.grey.shade400,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: style.alignment,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: style.leftUserPadding,
+                      right: style.rightUserPadding),
+                  child: Text(
+                    message.sender.username,
+                    style: style.usernameStyle,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      message.text,
-                      style: TextStyle(
-                          color: isCurrentUser ? Colors.white : Colors.black),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.all(Radius.circular(style.radius)),
+                  highlightColor: style.inkColor,
+                  onLongPress:
+                      sizingInformation.isDesktop ? null : onButtonPressed,
+                  child: Ink(
+                    child: Padding(
+                      padding: EdgeInsets.all(style.padding),
+                      child: Text(
+                        message.text,
+                        style: style.mainTextStyle,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      color: style.backgroundColor,
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(style.radius)),
                     ),
                   ),
                 ),
-              ),
-              if (!isCurrentUser) Flexible(child: Container(), flex: 5)
-            ],
+                if (buttonLabel != null)
+                  sizingInformation.isDesktop
+                      ? TextButton(
+                          onPressed: onButtonPressed,
+                          child: Text(
+                            buttonLabel!,
+                            style: style.buttonStyle,
+                          ))
+                      : Container(),
+              ],
+            ),
           ),
-          PlatformWidget.mobile(
-            defaultBuilder: (context) {
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isCurrentUser && onDelete != null)
-                    TextButton(
-                        onPressed: onDelete,
-                        child: Text('Delete'),
-                        style: TextButton.styleFrom(primary: Colors.red)),
-                  if (!isCurrentUser && onReport != null)
-                    TextButton(
-                      onPressed: onReport,
-                      child: const Text('Report'),
-                    )
-                ],
-              );
-            },
-          )
         ],
-      ),
-    );
+      );
+    });
   }
 }
