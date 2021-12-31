@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_chat_app/common/models/chat_message.dart';
 import 'package:flutter_chat_app/common/services/firestore_server.dart';
 
 class HomeStateProvider extends ChangeNotifier {
@@ -44,5 +45,9 @@ class HomeStateProvider extends ChangeNotifier {
     _canSendMessage = false;
     await Future.delayed(const Duration(seconds: 30));
     _canSendMessage = true;
+  }
+
+  Future<void> deleteMessage(ChatMessage message) async {
+    await fireStoreServer.removeMessage(message);
   }
 }

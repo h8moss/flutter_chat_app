@@ -23,5 +23,9 @@ class FireStoreServer {
       .orderBy('sent', descending: true)
       .snapshots()
       .map<List<ChatMessage>>((event) =>
-          event.docs.map((e) => ChatMessage.fromJson(e.data())).toList());
+          event.docs.map((e) => ChatMessage.fromJson(e.data(), e.id)).toList());
+
+  Future<void> removeMessage(ChatMessage message) async {
+    await _firestore.collection('messages').doc(message.id).delete();
+  }
 }

@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/app/home/home_state_provider.dart';
+import 'package:flutter_chat_app/app/messages/message_widget.dart';
+import 'package:flutter_chat_app/common/models/chat_message.dart';
+import 'package:flutter_chat_app/common/models/message_widget_style.dart';
 import 'package:flutter_chat_app/common/services/auth_service.dart';
 import 'package:flutter_chat_app/common/services/firestore_server.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +24,7 @@ class HomePage extends StatefulWidget {
         builder: (context, server, _) =>
             ChangeNotifierProvider<HomeStateProvider>(
           create: (_) => HomeStateProvider(server),
-          child: HomePage._(),
+          child: const HomePage._(),
         ),
       ),
     );
@@ -56,8 +58,15 @@ class _HomePageState extends State<HomePage> {
             body: Column(
               children: [
                 Expanded(
-                  child: MessageListView(
-                    scrollController: _messageScroll,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Flexible(
+                        child: MessageListView(
+                            scrollController: _messageScroll,
+                            onDelete: (msg) => _showDeleteDialog(context, msg)),
+                      ),
+                    ],
                   ),
                 ),
                 MessageInput(
@@ -116,5 +125,46 @@ class _HomePageState extends State<HomePage> {
   void _jumpDown() {
     _messageScroll.animateTo(0,
         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+  }
+
+  Future<void> _showDeleteDialog(
+      BuildContext context, ChatMessage message) async {
+    final homeState = Provider.of<HomeStateProvider>(context, listen: false);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          children: [
+            Center(child: const Text('Do you wish to delete this message?')),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: MessageWidget(
+                  message: message,
+                  onButtonPressed: null,
+                  style: MessageWidgetStyle.byUser(),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('No')),
+                TextButton(
+                    onPressed: () async {
+                      await homeState.deleteMessage(message);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('yes'))
+              ],
+            )
+          ],
+        );
+      },
+    );
   }
 }
