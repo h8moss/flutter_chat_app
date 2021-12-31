@@ -7,8 +7,6 @@ class FireStoreServer {
 
   final AppUser currentUser;
 
-  // Stream<List<ChatMessage>> get messages;
-
   FirebaseFirestore get _firestore => FirebaseFirestore.instance;
 
   Future<void> sendMessage(String text) async {
