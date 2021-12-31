@@ -4,14 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_chat_app/common/models/app_user.dart';
 import 'package:flutter_chat_app/common/models/auth_state.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   AuthService() {
     FirebaseAuth.instance.userChanges().listen((user) {
-      _currentUserBehavior
-          .add(user == null ? null : AppUser.fromFirebase(user));
       if (user == null) {
         _authStateController.add(AuthState.unauthenticated);
       } else {
@@ -19,11 +16,10 @@ class AuthService {
       }
     });
   }
+  User? get _firebaseUser => FirebaseAuth.instance.currentUser;
 
-  final BehaviorSubject<AppUser?> _currentUserBehavior =
-      BehaviorSubject.seeded(null);
-
-  AppUser? get currentUser => _currentUserBehavior.valueOrNull;
+  AppUser? get currentUser =>
+      _firebaseUser != null ? AppUser.fromFirebase(_firebaseUser!) : null;
 
   final GoogleAuthProvider _googleAuth = GoogleAuthProvider();
 
