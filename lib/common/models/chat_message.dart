@@ -6,6 +6,7 @@ class ChatMessage {
     required this.sender,
     required this.sentDate,
     required this.text,
+    this.id,
   });
 
   /// returns a map of this message for firestore
@@ -18,16 +19,18 @@ class ChatMessage {
     };
   }
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) {
+  factory ChatMessage.fromJson(Map<String, dynamic> json, String id) {
     return ChatMessage(
       sender:
           AppUser(uid: json['sender'], username: json['username'] ?? 'Unknown'),
       sentDate: (json['sent'] as Timestamp).toDate(),
       text: json['text'],
+      id: id,
     );
   }
 
-  AppUser sender;
-  DateTime sentDate;
-  String text;
+  final AppUser sender;
+  final DateTime sentDate;
+  final String text;
+  final String? id;
 }
