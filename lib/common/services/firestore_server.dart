@@ -19,6 +19,7 @@ class FireStoreServer {
   Stream<List<ChatMessage>> get messages => _firestore
       .collection('messages')
       .orderBy('sent', descending: true)
+      .limit(50)
       .snapshots()
       .map<List<ChatMessage>>((event) =>
           event.docs.map((e) => ChatMessage.fromJson(e.data(), e.id)).toList());
