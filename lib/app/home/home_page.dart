@@ -87,6 +87,23 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @override
+  void dispose() {
+    _messageScroll.dispose();
+    _messageTextController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    _messageScroll.addListener(() =>
+        Provider.of<HomeStateProvider>(context, listen: false).currentScroll =
+            _messageScroll.offset);
+
+    super.initState();
+  }
+
   Column _buildFloatActionButton(HomeStateProvider homeState) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -105,23 +122,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void dispose() {
-    _messageScroll.dispose();
-    _messageTextController.dispose();
-
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _messageScroll.addListener(() =>
-        Provider.of<HomeStateProvider>(context, listen: false).currentScroll =
-            _messageScroll.offset);
-
-    super.initState();
-  }
-
   void _jumpDown() {
     _messageScroll.animateTo(0,
         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
@@ -136,12 +136,11 @@ class _HomePageState extends State<HomePage> {
       builder: (context) {
         return SimpleDialog(
           children: [
-            Center(child: const Text('Do you wish to delete this message?')),
+            const Center(child: Text('Do you wish to delete this message?')),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: 100,
-                height: 100,
                 child: MessageWidget(
                   message: message,
                   onButtonPressed: null,
@@ -156,8 +155,15 @@ class _HomePageState extends State<HomePage> {
                     child: const Text('No')),
                 TextButton(
                     onPressed: () async {
-                      await homeState.deleteMessage(message);
-                      Navigator.pop(context);
+                      try {
+                        await homeState.deleteMessage(message);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Something went wrong')));
+                      } finally {
+                        Navigator.pop(context);
+                      }
                     },
                     child: const Text('yes'))
               ],
