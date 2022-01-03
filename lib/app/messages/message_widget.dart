@@ -40,7 +40,9 @@ class MessageWidget extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(style.radius)),
                   highlightColor: style.inkColor,
                   onLongPress:
-                      sizingInformation.isDesktop ? null : onButtonPressed,
+                      sizingInformation.isDesktop || buttonLabel == null
+                          ? null
+                          : onButtonPressed,
                   child: Ink(
                     child: Padding(
                       padding: EdgeInsets.all(style.padding),
