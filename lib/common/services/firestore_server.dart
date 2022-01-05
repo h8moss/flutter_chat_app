@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_chat_app/common/models/app_user.dart';
 import 'package:flutter_chat_app/common/models/chat_message.dart';
 
-class FireStoreServer {
-  FireStoreServer(this.currentUser);
+class FirestoreServer {
+  FirestoreServer(this.currentUser);
 
   final AppUser currentUser;
 

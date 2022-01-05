@@ -21,8 +21,8 @@ class ChatMessage {
 
   factory ChatMessage.fromJson(Map<String, dynamic> json, String id) {
     return ChatMessage(
-      sender:
-          AppUser(uid: json['sender'], username: json['username'] ?? 'Unknown'),
+      sender: AppUser(
+          uid: json['sender'], username: json['username'] ?? 'anonymous'),
       sentDate: (json['sent'] as Timestamp).toDate(),
       text: json['text'],
       id: id,

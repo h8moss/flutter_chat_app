@@ -4,7 +4,7 @@ class AppUser {
   AppUser({required this.uid, required this.username});
 
   factory AppUser.fromFirebase(User user) {
-    return AppUser(uid: user.uid, username: user.displayName ?? 'mom');
+    return AppUser(uid: user.uid, username: user.displayName ?? 'anonymous');
   }
 
   final String uid;
