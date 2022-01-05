@@ -21,7 +21,7 @@ class LandingScreen extends StatelessWidget {
               return _buildLoadingPage();
             }
             if (snapshot.data == AuthState.authenticated) {
-              return HomePage.create(context);
+              return const HomePage();
             }
             return const LoginPage();
           },
