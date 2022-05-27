@@ -26,6 +26,7 @@ class LoginPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 32.0),
               child: ElevatedButton(
                 style: ButtonStyle(
+                    mouseCursor: MaterialStateMouseCursor.clickable,
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     side: MaterialStateProperty.resolveWith((states) =>
                         states.contains(MaterialState.hovered)
