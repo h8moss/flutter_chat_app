@@ -51,7 +51,10 @@ class _HomePageState extends State<HomePage> {
         actions: [
           TextButton(
               onPressed: _cubitOf(context).logout,
-              child: const Icon(Icons.logout))
+              child: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ))
         ],
       ),
       floatingActionButton: state.showFAB
