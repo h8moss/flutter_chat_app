@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_chat_app/app/home/home_page_state.dart';
@@ -12,8 +14,12 @@ class HomePageCubit extends Cubit<HomePageState> {
   })  : _firestoreServer = firestoreServer,
         _authService = authService,
         super(const HomePageState()) {
-    _firestoreServer.messages.listen((value) {
+    _messageSubscription = _firestoreServer.messages.listen((value) {
       emit(state.copyWith(messages: value));
+    });
+
+    _messageSubscription.onError((error) {
+      emit(state.copyWithNull(messages: true));
     });
 
     listviewScrollController.addListener(_onScroll);
@@ -25,10 +31,14 @@ class HomePageCubit extends Cubit<HomePageState> {
   int secondsUntilNextMessage = 0;
   ScrollController listviewScrollController = ScrollController();
 
+  late StreamSubscription<List<ChatMessage>> _messageSubscription;
+
   bool isMessageByUser(ChatMessage message) =>
       message.sender == _authService.currentUser!;
 
-  Future<void> logout() async {}
+  Future<void> logout() async {
+    await _authService.logOut();
+  }
 
   Future<void> sendMessage(String messageContents) async {
     if (messageContents.isNotEmpty) {
@@ -53,7 +63,7 @@ class HomePageCubit extends Cubit<HomePageState> {
   Future<void> onMessagePressed(BuildContext context) async {}
 
   Future<void> _countSecondsForMessage() async {
-    for (int i = 30; i >= 0; i--) {
+    for (int i = 5; i >= 0; i--) {
       secondsUntilNextMessage = i;
       await Future.delayed(const Duration(seconds: 1));
     }
@@ -64,11 +74,13 @@ class HomePageCubit extends Cubit<HomePageState> {
     if (secondsUntilNextMessage > 0) {
       return 'Wait $secondsUntilNextMessage seconds until next message';
     }
+    return null;
   }
 
   @override
   Future<void> close() async {
     listviewScrollController.dispose();
+    _messageSubscription.cancel();
 
     super.close();
   }
