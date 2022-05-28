@@ -60,7 +60,8 @@ class HomePageCubit extends Cubit<HomePageState> {
     }
   }
 
-  Future<void> onMessagePressed(BuildContext context) async {}
+  Future<void> onMessagePressed(
+      BuildContext context, ChatMessage message) async {}
 
   Future<void> _countSecondsForMessage() async {
     for (int i = 5; i >= 0; i--) {

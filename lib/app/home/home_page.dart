@@ -100,10 +100,8 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           child: MessageWidget(
             message: message,
-            onButtonPressed: isByUser
-                ? () => _cubitOf(context).onMessagePressed(context)
-                : null,
-            buttonLabel: isByUser ? 'Delete' : null,
+            onButtonPressed: () =>
+                _cubitOf(context).onMessagePressed(context, message),
             style: isByUser
                 ? MessageWidgetStyle.byUser()
                 : MessageWidgetStyle.byOther(),
