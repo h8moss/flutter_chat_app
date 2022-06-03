@@ -6,6 +6,7 @@ class ChatMessage {
     required this.sender,
     required this.sentDate,
     required this.text,
+    required this.isEdited,
     this.id,
   });
 
@@ -16,6 +17,7 @@ class ChatMessage {
       'text': text,
       'sender': sender.uid,
       'username': sender.username,
+      'is_edited': isEdited,
     };
   }
 
@@ -26,6 +28,7 @@ class ChatMessage {
       sentDate: (json['sent'] as Timestamp).toDate(),
       text: json['text'],
       id: id,
+      isEdited: json['isEdited'] ?? false,
     );
   }
 
@@ -33,4 +36,5 @@ class ChatMessage {
   final DateTime sentDate;
   final String text;
   final String? id;
+  final bool isEdited;
 }
