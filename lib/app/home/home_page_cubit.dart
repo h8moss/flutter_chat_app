@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/app/home/dialogs/delete_message_dialog.dart';
+import 'package:flutter_chat_app/app/home/dialogs/edit_message_dialog.dart';
 import 'package:flutter_chat_app/app/home/dialogs/flag_dialog.dart';
 import 'package:flutter_chat_app/app/home/dialogs/message_context_dialog/message_context_dialog.dart';
 import 'package:flutter_chat_app/app/home/home_page_state.dart';
@@ -94,6 +95,15 @@ class HomePageCubit extends Cubit<HomePageState> {
     final result = await DeleteMessageDialog.show(context);
     if (result) {
       await _firestoreServer.removeMessage(message);
+    }
+  }
+
+  Future<void> _editMessage(BuildContext context, ChatMessage message) async {
+    if (message.id != null) {
+      final result = await EditMessageDialog.show(context, message.text);
+      if (result != null) {
+        await _firestoreServer.updateMessageText(message.id!, result);
+      }
     }
   }
 
