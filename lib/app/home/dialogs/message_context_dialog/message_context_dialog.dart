@@ -42,7 +42,7 @@ class MessageContextDialog extends StatelessWidget {
                           context,
                           MessageContextChoice.flag,
                         ),
-                    child: const Text('Flag')),
+                    child: const Text('Flag as inappropriate')),
           ],
         ),
       ),
