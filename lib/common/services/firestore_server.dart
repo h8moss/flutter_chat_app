@@ -31,6 +31,10 @@ class FirestoreServer {
   Future<void> removeMessage(ChatMessage message) async {
     if (message.sender == currentUser) {
       await _firestore.collection('messages').doc(message.id).delete();
+      await _firestore
+          .collection('deleted')
+          .doc(message.id)
+          .set(message.toMap());
       return;
     }
     throw "Missing permissions";
@@ -38,7 +42,7 @@ class FirestoreServer {
 
   Future<void> updateMessageText(String id, String text) async {
     await _firestore.collection('messages').doc(id).set(
-      {'text': text, 'is_edited': true},
+      {'text': text, 'isEdited': true},
       SetOptions(merge: true),
     );
   }
