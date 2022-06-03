@@ -50,16 +50,36 @@ class MessageWidgetStyle {
         usernameStyle = const TextStyle(fontSize: 10, color: Colors.grey),
         isContextOnLeft = true;
 
+  /// Horizontal alignment of the message
   final CrossAxisAlignment alignment;
+
+  /// Text style for the username and edited texts
   final TextStyle? usernameStyle;
+
+  /// Text style for the message itself
   final TextStyle? mainTextStyle;
+
+  /// Padding inside the message bubble
   final double padding;
+
+  /// Radius of message bubble
   final double radius;
+
+  // bubble padding to the left of the screen
   final double leftUserPadding;
+
+  /// bubble padding to the right of the screen
   final double rightUserPadding;
+
+  /// Color of the bubble
   final Color backgroundColor;
+
+  /// Color of the ink splash
   final Color inkColor;
+
+  /// True if context button should appear to the left of the message
   final bool isContextOnLeft;
 
+  /// getter for the opposite of [isContextOnLeft]
   bool get isContextOnRight => !isContextOnLeft;
 }
