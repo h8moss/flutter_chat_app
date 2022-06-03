@@ -29,7 +29,11 @@ class FirestoreServer {
           event.docs.map((e) => ChatMessage.fromJson(e.data(), e.id)).toList());
 
   Future<void> removeMessage(ChatMessage message) async {
-    await _firestore.collection('messages').doc(message.id).delete();
+    if (message.sender == currentUser) {
+      await _firestore.collection('messages').doc(message.id).delete();
+      return;
+    }
+    throw "Missing permissions";
   }
 
   Future<void> updateMessageText(String id, String text) async {
