@@ -37,35 +37,14 @@ class MessageWidget extends StatelessWidget {
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (sizingInformation.isDesktop && style.isContextOnLeft)
+                    if (getShowContextLeft(sizingInformation))
                       _buildContextButton(),
-                    Flexible(
-                      child: InkWell(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(style.radius)),
-                        highlightColor: style.inkColor,
-                        onLongPress: !sizingInformation.isDesktop
-                            ? onButtonPressed
-                            : null,
-                        child: Ink(
-                          child: Padding(
-                            padding: EdgeInsets.all(style.padding),
-                            child: Text(
-                              message.text,
-                              style: style.mainTextStyle,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            color: style.backgroundColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(style.radius)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (sizingInformation.isDesktop && !style.isContextOnLeft)
-                      _buildContextButton(),
+                    _buildBody(sizingInformation),
+                    if (getShowContextRight(sizingInformation))
+                      _buildContextButton()
                   ],
                 ),
               ],
@@ -74,6 +53,35 @@ class MessageWidget extends StatelessWidget {
         ],
       );
     });
+  }
+
+  bool getShowContextLeft(SizingInformation sizingInformation) =>
+      sizingInformation.isDesktop && style.isContextOnLeft;
+
+  bool getShowContextRight(SizingInformation sizingInformation) =>
+      sizingInformation.isDesktop && style.isContextOnRight;
+
+  Widget _buildBody(SizingInformation sizingInformation) {
+    return Flexible(
+      child: InkWell(
+        borderRadius: BorderRadius.all(Radius.circular(style.radius)),
+        highlightColor: style.inkColor,
+        onLongPress: !sizingInformation.isDesktop ? onButtonPressed : null,
+        child: Ink(
+          child: Padding(
+            padding: EdgeInsets.all(style.padding),
+            child: Text(
+              message.text,
+              style: style.mainTextStyle,
+            ),
+          ),
+          decoration: BoxDecoration(
+            color: style.backgroundColor,
+            borderRadius: BorderRadius.all(Radius.circular(style.radius)),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildContextButton() {
