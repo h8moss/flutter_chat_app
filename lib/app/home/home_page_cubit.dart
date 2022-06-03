@@ -2,7 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/app/home/dialogs/delete_message_dialog.dart';
+import 'package:flutter_chat_app/app/home/dialogs/flag_dialog.dart';
+import 'package:flutter_chat_app/app/home/dialogs/message_context_dialog/message_context_dialog.dart';
 import 'package:flutter_chat_app/app/home/home_page_state.dart';
+import 'package:flutter_chat_app/app/home/dialogs/message_context_dialog/message_context_choice.dart';
 import 'package:flutter_chat_app/common/models/chat_message.dart';
 import 'package:flutter_chat_app/common/services/auth_service.dart';
 import 'package:flutter_chat_app/common/services/firestore_server.dart';
@@ -61,7 +66,36 @@ class HomePageCubit extends Cubit<HomePageState> {
   }
 
   Future<void> onMessagePressed(
-      BuildContext context, ChatMessage message) async {}
+      BuildContext context, ChatMessage message) async {
+    final isByUser = isMessageByUser(message);
+
+    final result = await MessageContextDialog.show(context, isByUser);
+
+    if (result != null) {
+      switch (result) {
+        case MessageContextChoice.flag:
+          await _flagMessage(context, message);
+          break;
+        case MessageContextChoice.delete:
+          await _deleteMessage(context, message);
+          break;
+        case MessageContextChoice.edit:
+          await _editMessage(context, message);
+          break;
+      }
+    }
+  }
+
+  Future<void> _flagMessage(BuildContext context, ChatMessage message) async {
+    await FlagDialog.show(context);
+  }
+
+  Future<void> _deleteMessage(BuildContext context, ChatMessage message) async {
+    final result = await DeleteMessageDialog.show(context);
+    if (result) {
+      await _firestoreServer.removeMessage(message);
+    }
+  }
 
   Future<void> _countSecondsForMessage() async {
     for (int i = 5; i >= 0; i--) {
