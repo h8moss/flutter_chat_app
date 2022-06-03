@@ -30,10 +30,7 @@ class MessageWidget extends StatelessWidget {
                     left: style.leftUserPadding,
                     right: style.rightUserPadding,
                   ),
-                  child: Text(
-                    message.sender.username,
-                    style: style.usernameStyle,
-                  ),
+                  child: _buildSenderText(),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -53,6 +50,16 @@ class MessageWidget extends StatelessWidget {
         ],
       );
     });
+  }
+
+  Widget _buildSenderText() {
+    final text =
+        '${message.sender.username}${message.isEdited ? ' - edited' : ''}';
+
+    return Text(
+      text,
+      style: style.usernameStyle,
+    );
   }
 
   bool getShowContextLeft(SizingInformation sizingInformation) =>
