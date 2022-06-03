@@ -10,8 +10,12 @@ class FirestoreServer {
   FirebaseFirestore get _firestore => FirebaseFirestore.instance;
 
   Future<void> sendMessage(String text) async {
-    ChatMessage message =
-        ChatMessage(sender: currentUser, sentDate: DateTime.now(), text: text);
+    ChatMessage message = ChatMessage(
+      sender: currentUser,
+      sentDate: DateTime.now(),
+      text: text,
+      isEdited: false,
+    );
 
     await _firestore.collection('messages').add(message.toMap());
   }
@@ -26,5 +30,12 @@ class FirestoreServer {
 
   Future<void> removeMessage(ChatMessage message) async {
     await _firestore.collection('messages').doc(message.id).delete();
+  }
+
+  Future<void> updateMessageText(String id, String text) async {
+    await _firestore.collection('messages').doc(id).set(
+      {'text': text, 'is_edited': true},
+      SetOptions(merge: true),
+    );
   }
 }
