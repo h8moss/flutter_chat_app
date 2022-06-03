@@ -60,4 +60,6 @@ class MessageWidgetStyle {
   final Color backgroundColor;
   final Color inkColor;
   final bool isContextOnLeft;
+
+  bool get isContextOnRight => !isContextOnLeft;
 }
