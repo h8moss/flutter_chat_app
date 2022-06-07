@@ -4,22 +4,25 @@ import Filter = require("bad-words");
 
 export const censorMessages = functions.firestore
   .document("/messages/{documentId}")
-  .onCreate((snap, context) => {
-    const original: string = snap.data().text;
+  .onWrite((change, context) => {
+    const originalData = change.after.data();
+    if (originalData !== undefined) {
+      const original: string = originalData.text;
 
-    const filter = new Filter();
+      const filter = new Filter();
 
-    if (filter.isProfane(original)) {
-      const result = filter.clean(original);
+      if (filter.isProfane(original)) {
+        const result = filter.clean(original);
 
-      functions.logger.log(
-        "Censor",
-        context.params.documentId,
-        original,
-        result
-      );
+        functions.logger.log(
+          "Censor",
+          context.params.documentId,
+          original,
+          result
+        );
 
-      return snap.ref.set({ text: result }, { merge: true });
+        return change.after.ref.set({ text: result }, { merge: true });
+      }
     }
     return null;
   });
