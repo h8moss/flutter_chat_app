@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/common/widgets/platform_text.dart';
 
 class DeleteMessageDialog extends StatelessWidget {
   const DeleteMessageDialog({Key? key}) : super(key: key);
@@ -13,7 +14,8 @@ class DeleteMessageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: const Text('Are you sure you want to delete this message?'),
+      content:
+          const PlatformText('Are you sure you want to delete this message?'),
       actions: [
         TextButton(
             onPressed: () => Navigator.pop(context, false),

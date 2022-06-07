@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/models/chat_message.dart';
 import 'package:flutter_chat_app/common/models/message_widget_style.dart';
+import 'package:flutter_chat_app/common/widgets/platform_text.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class MessageWidget extends StatelessWidget {
@@ -54,7 +55,7 @@ class MessageWidget extends StatelessWidget {
     final text =
         '${message.sender.username}${message.isEdited ? ' - edited' : ''}';
 
-    return Text(
+    return PlatformText(
       text,
       style: style.usernameStyle,
     );
@@ -72,7 +73,7 @@ class MessageWidget extends StatelessWidget {
         child: Ink(
           child: Padding(
             padding: EdgeInsets.all(style.padding),
-            child: Text(
+            child: PlatformText(
               message.text,
               style: style.mainTextStyle,
             ),

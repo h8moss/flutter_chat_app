@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/services/auth_service.dart';
+import 'package:flutter_chat_app/common/widgets/platform_text.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_chat_app/common/services/url_launcher/url_launcher_others.dart'
@@ -17,7 +18,7 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(child: Container()),
-            const Text(
+            const PlatformText(
               "Welcome to h8m0ss's chat app, before you start chatting, you need to log in",
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
@@ -44,7 +45,7 @@ class LoginPage extends StatelessWidget {
                         height: 30,
                       ),
                       const SizedBox(width: 16),
-                      const Text(
+                      const PlatformText(
                         'Continue with Google',
                         style: TextStyle(color: Colors.black),
                       ),
@@ -60,7 +61,7 @@ class LoginPage extends StatelessWidget {
               children: [
                 const Expanded(
                   child: Center(
-                    child: Text(
+                    child: PlatformText(
                       'This app was made by h8m0ss for the purpose of demonstrating basic flutter and firebase concepts.',
                     ),
                   ),

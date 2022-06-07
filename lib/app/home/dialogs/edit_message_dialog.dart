@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/common/widgets/platform_text.dart';
 
 class EditMessageDialog extends StatefulWidget {
   const EditMessageDialog({Key? key, required this.initialText})
@@ -34,7 +35,7 @@ class _EditMessageDialogState extends State<EditMessageDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Edit Message'),
+      title: const PlatformText('Edit Message'),
       content: TextField(controller: _controller),
       actions: [
         TextButton(

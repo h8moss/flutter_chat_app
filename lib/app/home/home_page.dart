@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/common/widgets/message_widget.dart';
 import 'package:flutter_chat_app/common/models/message_widget_style.dart';
 import 'package:flutter_chat_app/common/services/auth_service.dart';
 import 'package:flutter_chat_app/common/services/firestore_server.dart';
+import 'package:flutter_chat_app/common/widgets/platform_text.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBody(BuildContext context, HomePageState state) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat'),
+        title: const PlatformText('Chat'),
         actions: [
           TextButton(
               onPressed: _cubitOf(context).logout,
@@ -86,7 +87,8 @@ class _HomePageState extends State<HomePage> {
 
     if (state.messages!.isEmpty) {
       return const Center(
-          child: Text('No messages yet. Be the first to send a message!'));
+          child:
+              PlatformText('No messages yet. Be the first to send a message!'));
     }
 
     return ListView.builder(
