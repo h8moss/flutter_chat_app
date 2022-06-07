@@ -37,11 +37,9 @@ class MessageWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (getShowContextLeft(sizingInformation))
+                    if (getShowContextButton(sizingInformation))
                       _buildContextButton(),
                     _buildBody(sizingInformation),
-                    if (getShowContextRight(sizingInformation))
-                      _buildContextButton()
                   ],
                 ),
               ],
@@ -62,11 +60,8 @@ class MessageWidget extends StatelessWidget {
     );
   }
 
-  bool getShowContextLeft(SizingInformation sizingInformation) =>
-      sizingInformation.isDesktop && style.isContextOnLeft;
-
-  bool getShowContextRight(SizingInformation sizingInformation) =>
-      sizingInformation.isDesktop && style.isContextOnRight;
+  bool getShowContextButton(SizingInformation sizingInformation) =>
+      sizingInformation.isDesktop && style.showContextButton;
 
   Widget _buildBody(SizingInformation sizingInformation) {
     return Flexible(

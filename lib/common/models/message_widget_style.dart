@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MessageWidgetStyle {
   const MessageWidgetStyle({
     this.alignment = CrossAxisAlignment.start,
-    this.isContextOnLeft = true,
+    this.showContextButton = true,
     this.backgroundColor = Colors.blue,
     this.inkColor = Colors.grey,
     this.padding = 0,
@@ -24,7 +24,7 @@ class MessageWidgetStyle {
         leftUserPadding = 0,
         rightUserPadding = 0,
         usernameStyle = const TextStyle(fontSize: 10, color: Colors.grey),
-        isContextOnLeft = false;
+        showContextButton = true;
 
   MessageWidgetStyle.byOther()
       : alignment = CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class MessageWidgetStyle {
         radius = 30,
         rightUserPadding = 0,
         usernameStyle = const TextStyle(fontSize: 10, color: Colors.grey),
-        isContextOnLeft = false;
+        showContextButton = false;
 
   MessageWidgetStyle.byUser()
       : alignment = CrossAxisAlignment.end,
@@ -48,7 +48,7 @@ class MessageWidgetStyle {
         radius = 30,
         rightUserPadding = 8,
         usernameStyle = const TextStyle(fontSize: 10, color: Colors.grey),
-        isContextOnLeft = true;
+        showContextButton = true;
 
   /// Horizontal alignment of the message
   final CrossAxisAlignment alignment;
@@ -77,9 +77,6 @@ class MessageWidgetStyle {
   /// Color of the ink splash
   final Color inkColor;
 
-  /// True if context button should appear to the left of the message
-  final bool isContextOnLeft;
-
-  /// getter for the opposite of [isContextOnLeft]
-  bool get isContextOnRight => !isContextOnLeft;
+  /// True if context button should appear on desktop
+  final bool showContextButton;
 }
