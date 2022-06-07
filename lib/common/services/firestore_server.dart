@@ -17,7 +17,9 @@ class FirestoreServer {
       isEdited: false,
     );
 
-    await _firestore.collection('messages').add(message.toMap());
+    await _firestore
+        .collection('messages')
+        .add({...message.toMap(), 'original_text': text});
   }
 
   Stream<List<ChatMessage>> get messages => _firestore
