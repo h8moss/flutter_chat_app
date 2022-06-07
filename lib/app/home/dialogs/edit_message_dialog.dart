@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EditMessageDialog extends StatefulWidget {
@@ -18,7 +17,7 @@ class EditMessageDialog extends StatefulWidget {
 }
 
 class _EditMessageDialogState extends State<EditMessageDialog> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
