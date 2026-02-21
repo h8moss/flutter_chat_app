@@ -102,6 +102,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           child: MessageWidget(
             message: message,
+            showYouInsteadOfName: message.sender.username == 'anonymous' && isByUser,
             onButtonPressed: () =>
                 _cubitOf(context).onMessagePressed(context, message),
             style: isByUser
