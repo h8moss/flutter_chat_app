@@ -11,11 +11,13 @@ class MessageWidget extends StatelessWidget {
     required this.message,
     required this.onButtonPressed,
     this.style = const MessageWidgetStyle(),
+    this.showYouInsteadOfName = false,
   }) : super(key: key);
 
   final ChatMessage message;
   final MessageWidgetStyle style;
   final FutureOr<void> Function()? onButtonPressed;
+  final bool showYouInsteadOfName;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +54,9 @@ class MessageWidget extends StatelessWidget {
   }
 
   Widget _buildSenderText() {
+    final name = showYouInsteadOfName ? 'You' : message.sender.username;
     final text =
-        '${message.sender.username}${message.isEdited ? ' - edited' : ''}';
+        '$name${message.isEdited ? ' - edited' : ''}';
 
     return PlatformText(
       text,
@@ -71,16 +74,16 @@ class MessageWidget extends StatelessWidget {
         highlightColor: style.inkColor,
         onLongPress: !sizingInformation.isDesktop ? onButtonPressed : null,
         child: Ink(
+          decoration: BoxDecoration(
+            color: style.backgroundColor,
+            borderRadius: BorderRadius.all(Radius.circular(style.radius)),
+          ),
           child: Padding(
             padding: EdgeInsets.all(style.padding),
             child: PlatformText(
               message.text,
               style: style.mainTextStyle,
             ),
-          ),
-          decoration: BoxDecoration(
-            color: style.backgroundColor,
-            borderRadius: BorderRadius.all(Radius.circular(style.radius)),
           ),
         ),
       ),
