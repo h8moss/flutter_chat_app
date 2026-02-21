@@ -14,8 +14,9 @@ class DeleteMessageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      constraints: BoxConstraints.tight(Size(400, 200)),
       content:
-          const PlatformText('Are you sure you want to delete this message?'),
+          IntrinsicWidth(child: const PlatformText('Are you sure you want to delete this message?')),
       actions: [
         TextButton(
             onPressed: () => Navigator.pop(context, false),

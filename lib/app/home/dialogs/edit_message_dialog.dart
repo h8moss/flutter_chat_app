@@ -35,8 +35,13 @@ class _EditMessageDialogState extends State<EditMessageDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      constraints: BoxConstraints.tight(Size(400, 200)),
+      titlePadding: EdgeInsets.all(8),
+      contentPadding: EdgeInsets.all(8),
       title: const PlatformText('Edit Message'),
-      content: TextField(controller: _controller),
+      content: IntrinsicWidth(
+        child: TextField(controller: _controller),
+        ),
       actions: [
         TextButton(
             onPressed: () => Navigator.pop(context, _controller.text),
