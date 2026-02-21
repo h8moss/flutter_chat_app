@@ -19,40 +19,46 @@ class LoginPage extends StatelessWidget {
           children: [
             Expanded(child: Container()),
             const PlatformText(
-              "Welcome to h8m0ss's chat app, before you start chatting, you need to log in",
+              "Welcome to Daniel's chat app, before you start chatting, you need to log in",
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 32.0),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    mouseCursor: MaterialStateMouseCursor.clickable,
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    side: MaterialStateProperty.resolveWith((states) =>
-                        states.contains(MaterialState.hovered)
-                            ? BorderSide(color: Colors.grey.shade600, width: 2)
-                            : const BorderSide(color: Colors.grey, width: 1))),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        child: Image.asset('assets/google.png'),
-                        width: 30,
-                        height: 30,
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        mouseCursor: WidgetStateMouseCursor.clickable,
+                        backgroundColor: WidgetStateProperty.all(Colors.white),
+                        side: WidgetStateProperty.resolveWith((states) =>
+                            states.contains(WidgetState.hovered)
+                                ? BorderSide(color: Colors.grey.shade600, width: 2)
+                                : const BorderSide(color: Colors.grey, width: 1))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: Image.asset('assets/google.png'),
+                          ),
+                          const SizedBox(width: 16),
+                          const PlatformText(
+                            'Continue with Google',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 16),
-                      const PlatformText(
-                        'Continue with Google',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
+                    ),
+                    onPressed: () => _logIn(context),
                   ),
-                ),
-                onPressed: () => _logIn(context),
+                  SizedBox(height: 16),
+                  ElevatedButton(onPressed: () => _anonymousSignin(context), child: Text('Sign in anonymously'))
+                ],
               ),
             ),
             Expanded(child: Container()),
@@ -88,6 +94,15 @@ class LoginPage extends StatelessWidget {
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
+
+  Future<void> _anonymousSignin(BuildContext context) async {
+    try {
+      await Provider.of<AuthService>(context, listen: false).loginAnonymous();
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 }
